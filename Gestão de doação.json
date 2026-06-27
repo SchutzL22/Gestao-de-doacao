@@ -1,0 +1,124 @@
+{
+  "projeto": {
+    "nome": "Sistema de Gestão de Doações FMP",
+    "instituicao": "Faculdade Municipal de Palhoça (FMP)",
+    "contexto": "Projeto Integrador II - 2026.1",
+    "equipe": ["Eduardo Silva", "Davi Aravechia", "Lucas Alexandre Vieira Schutz", "Vitor Emanuel"],
+    "orientador": "Prof. Rafael Novo da Rosa",
+    "objetivos": [
+      "Digitalizar ciclo de vida das doações",
+      "Garantir auditabilidade e transparência",
+      "Automatizar cômputo de horas complementares",
+      "Emitir comprovantes digitais (PDF) com Token de autenticidade"
+    ]
+  },
+  "arquitetura_e_tecnologias": {
+    "padrao": "Arquitetura em Camadas (Apresentação, Negócio, Persistência, Domínio)",
+    "backend": "Java (Spring Boot / API REST)",
+    "frontend": "HTML5, CSS3, JavaScript (Fetch API)",
+    "banco_de_dados": "MySQL (acesso via JPA/Hibernate)",
+    "seguranca": "Criptografia AES-256 (At rest), TLS 1.2+ (In transit), controle RBAC, aderência LGPD"
+  },
+  "atores": {
+    "Aluno": "Visualiza campanhas, registra entregas (via Coper), acompanha saldo de horas e baixa certificados.",
+    "Coper_Funcionario": "Registra entregas físicas, valida (aprova/reprova) doações, cadastra campanhas e itens prioritários.",
+    "Administrador": "Controle total, auditoria, gestão de usuários e perfis.",
+    "Sistema": "Gera notificações e PDFs automaticamente."
+  },
+  "entidades": {
+    "Usuario": {
+      "tipo": "Abstract",
+      "atributos": ["id", "nome", "cpf", "email", "senha"],
+      "metodos": ["autenticar", "logout", "alterarSenha"]
+    },
+    "Aluno": {
+      "heranca": "Usuario",
+      "atributos": ["matricula", "curso", "saldoHoras"],
+      "metodos": ["consultarHistorico", "baixarCertificado", "consultarSaldoHoras"]
+    },
+    "Funcionario": {
+      "heranca": "Usuario",
+      "atributos": ["departamento", "cargo"],
+      "metodos": ["registrarDoacao", "validarDoacao", "cadastrarCampanha", "gerarRelatorio", "cadastrarUsuario", "definirItensPrioritarios"]
+    },
+    "Campanha": {
+      "atributos": ["id", "titulo", "descricao", "dataLimite", "status", "regrasConversao", "limiteHoras"],
+      "metodos": ["estaAtiva", "getDetalhes"]
+    },
+    "Doacao": {
+      "atributos": ["id", "alunoId", "campanhaId", "data", "quantidade", "tipoItem", "status", "fotoEvidencia", "motivoReprovacao", "horasConcedidas"],
+      "metodos": ["registrarEntrega", "atualizarStatus", "calcularHoras"]
+    },
+    "Certificado": {
+      "atributos": ["id", "token", "caminhoArquivo", "dataEmissao"],
+      "metodos": ["gerarPDF", "validarToken"]
+    },
+    "ItemPrioritario": {
+      "atributos": ["id", "nome", "meta", "urgencia"]
+    },
+    "Notificacao": {
+      "atributos": ["id", "mensagem", "dataEnvio", "canal"]
+    },
+    "Anexo": {
+      "atributos": ["id", "nomeArquivo", "caminho"]
+    }
+  },
+  "casos_de_uso": [
+    {"id": "UC01", "nome": "Realizar Login / Cadastro (validação @aluno.fmpsc.edu.br)"},
+    {"id": "UC02", "nome": "Registrar Doação", "ator": "Coper"},
+    {"id": "UC03", "nome": "Validar Doação (Aprovar/Reprovar)", "ator": "Coper"},
+    {"id": "UC04", "nome": "Consultar Histórico e Saldo", "ator": "Aluno"},
+    {"id": "UC05", "nome": "Baixar Histórico", "ator": "Aluno"},
+    {"id": "UC06", "nome": "Gerar Notificação", "ator": "Sistema"},
+    {"id": "UC07", "nome": "Gerar Certificado (PDF c/ Token)", "ator": "Sistema", "gatilho": "Doação Aprovada"},
+    {"id": "UC08", "nome": "Consultar Certificado", "ator": "Aluno"},
+    {"id": "UC09", "nome": "Consultar Horas", "ator": "Aluno"},
+    {"id": "UC10", "nome": "Visualizar Campanhas", "ator": "Aluno"},
+    {"id": "UC11", "nome": "Gerenciar Doações", "ator": "Coper"},
+    {"id": "UC12", "nome": "Cadastrar Administradores e Usuários", "ator": "Coper"},
+    {"id": "UC13", "nome": "Cadastrar e Alterar Campanhas", "ator": "Coper"},
+    {"id": "UC14", "nome": "Definir Itens Prioritários", "ator": "Coper"}
+  ],
+  "requisitos_funcionais": {
+    "RF01": "Login e cadastro com validação de domínio institucional",
+    "RF02": "Recuperação de senha via e-mail",
+    "RF03": "Dashboard com listagem de campanhas",
+    "RF04": "Gestão de itens prioritários com badge de urgência",
+    "RF05": "Registro detalhado de doações",
+    "RF06": "Gestão de status de aprovação de doações",
+    "RF07": "Manutenção de histórico retroativo",
+    "RF08": "Painel de consulta de saldo de horas",
+    "RF09": "Sistema de notificações",
+    "RF10": "Geração automatizada de PDF com Token",
+    "RF11": "Exibição de regras e limites por campanha",
+    "RF12": "Geração de relatórios consolidados",
+    "RF13": "Pesquisa global",
+    "RF14": "Controle de acesso (RBAC)"
+  },
+  "requisitos_nao_funcionais": {
+    "RNF01": "Usabilidade: Acessibilidade WCAG 2.1 AA",
+    "RNF02": "Portabilidade: Design Responsivo (Desktop/Mobile)",
+    "RNF03": "Desempenho: Tempo de resposta < 3s",
+    "RNF04": "Disponibilidade: Uptime 99%",
+    "RNF05": "Segurança: LGPD, Criptografia AES-256 e TLS 1.2+",
+    "RNF06": "Manutenibilidade: Backup diário e retenção de 2 a 10 anos"
+  },
+  "regras_de_negocio": [
+    "RN01/RN11: Uso estritamente institucional e sem fins comerciais",
+    "RN04/RN13: Apenas alunos recebem horas; funcionários apenas registram logística",
+    "RN05: Aprovação de horas exige matrícula ativa do aluno",
+    "RN06/RN07: PDF gerado apenas após aprovação, com layout oficial da FMP",
+    "RN09: Logs de acesso para dados sensíveis devem ser mantidos"
+  ],
+  "telas_front_end_disponiveis": [
+    "Login",
+    "Dashboard Administrativo (Coper)",
+    "Registrar Doação (Coper)",
+    "Validar Doações (Coper)",
+    "Gestão de Campanhas (Coper)",
+    "Painel do Aluno (Resumo de horas e doações)",
+    "Campanhas Ativas (Aluno)",
+    "Histórico de Doações (Aluno)",
+    "Editar Perfil"
+  ]
+}

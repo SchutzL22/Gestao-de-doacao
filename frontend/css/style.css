@@ -1,0 +1,614 @@
+/* =====================================================
+   COPER FMP | style.css
+   Sistema de Gestão de Doações
+   ===================================================== */
+
+/* =====================================================
+   1. VARIÁVEIS GLOBAIS
+   ===================================================== */
+:root {
+    --primary:       #0A3A60;
+    --primary-light: #1A5282;
+    --secondary:     #E3E8EC;
+    --success:       #27AE60;
+    --warning:       #F2994A;
+    --danger:        #EB5757;
+    --text-dark:     #2C3E50;
+    --text-muted:    #7F8C8D;
+    --bg-light:      #F4F7F9;
+    --white:         #FFFFFF;
+    --border:        #E0E6ED;
+    --shadow:        0 2px 8px rgba(0,0,0,0.07);
+    --sidebar-w:     220px;
+}
+
+/* =====================================================
+   2. RESET & BASE
+   ===================================================== */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter','Segoe UI',sans-serif; }
+body { background: var(--bg-light); color: var(--text-dark); font-size: 0.92rem; }
+
+/* =====================================================
+   3. UTILITÁRIOS
+   ===================================================== */
+.hidden { display: none !important; }
+.active { display: flex; }
+.text-primary { color: var(--primary); }
+.text-success { color: var(--success); }
+.text-warning { color: var(--warning); }
+.text-danger  { color: var(--danger);  }
+.text-muted   { color: var(--text-muted); font-size: 0.82rem; }
+
+/* =====================================================
+   4. LOGIN
+   ===================================================== */
+#loginView {
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, var(--primary) 0%, #06233B 100%);
+    padding: 1rem;
+}
+
+.login-box {
+    background: var(--white);
+    padding: 2rem 2rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+.logo-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 0.6rem; }
+.login-box h1 { font-size: 1.4rem; margin-bottom: 0.2rem; }
+.login-box p, .login-box > div > p { color: var(--text-muted); margin-bottom: 1.2rem; font-size: 0.85rem; }
+
+.input-group { position: relative; margin-bottom: 0.8rem; text-align: left; }
+.input-group i { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; }
+.input-group input { width: 100%; padding: 0.7rem 0.9rem 0.7rem 2.4rem; border: 1px solid var(--border); border-radius: 6px; outline: none; transition: border-color 0.2s; font-size: 0.88rem; }
+.input-group input:focus { border-color: var(--primary); }
+
+.demo-credentials { margin-top: 1rem; font-size: 0.78rem; color: var(--text-muted); background: var(--bg-light); padding: 0.7rem; border-radius: 6px; line-height: 1.8; }
+
+/* Links de alternância de painel (Esqueci / Criar conta / Voltar) */
+.login-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+.link-btn {
+    background: none;
+    border: none;
+    color: var(--primary-light);
+    cursor: pointer;
+    font-size: 0.83rem;
+    font-weight: 500;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.15s;
+}
+.link-btn:hover { color: var(--primary); }
+.link-sep { color: var(--text-muted); font-size: 0.8rem; }
+
+/* =====================================================
+   5. BOTÕES
+   ===================================================== */
+.btn-primary { width: 100%; background: var(--primary); color: var(--white); padding: 0.7rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: background 0.2s; }
+.btn-primary:hover { background: var(--primary-light); }
+
+.btn-logout { width: 100%; padding: 0.6rem; background: none; border: 1px solid var(--danger); color: var(--danger); border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: 0.2s; }
+.btn-logout:hover { background: var(--danger); color: var(--white); }
+
+.btn-icon { background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0.25rem; margin-right: 0.3rem; transition: transform 0.2s; }
+.btn-icon.check { color: var(--success); }
+.btn-icon.times { color: var(--danger); }
+.btn-icon.pdf   { color: var(--primary); }
+.btn-icon:hover { transform: scale(1.15); }
+
+/* =====================================================
+   6. LAYOUT APP
+   ===================================================== */
+.layout-app { min-height: 100vh; display: flex; }
+
+/* =====================================================
+   7. SIDEBAR
+   ===================================================== */
+.sidebar {
+    width: var(--sidebar-w);
+    background: var(--white);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    z-index: 100;
+}
+
+.sidebar-brand {
+    padding: 1rem 1.2rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--primary);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sidebar-menu { list-style: none; padding: 0.5rem 0; flex: 1; overflow-y: auto; }
+.sidebar-menu li {
+    padding: 0.65rem 1.2rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.88rem;
+    transition: 0.15s;
+    border-right: 3px solid transparent;
+}
+.sidebar-menu li i { width: 16px; text-align: center; }
+.sidebar-menu li:hover,
+.sidebar-menu li.active {
+    background: var(--bg-light);
+    color: var(--primary);
+    border-right-color: var(--primary);
+    font-weight: 600;
+}
+
+.sidebar-footer { padding: 0.8rem; border-top: 1px solid var(--border); }
+
+/* Overlay para mobile */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 99;
+}
+.sidebar-overlay.active { display: block; }
+
+/* =====================================================
+   8. TOPBAR
+   ===================================================== */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: var(--sidebar-w);
+    min-height: 100vh;
+}
+
+.topbar {
+    background: var(--white);
+    padding: 0.85rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.topbar-left { display: flex; align-items: center; gap: 0.8rem; }
+.topbar h2 { font-size: 1rem; color: var(--text-dark); font-weight: 600; }
+
+/* Botão hamburguer (mobile) */
+.btn-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    cursor: pointer;
+    padding: 0.2rem 0.4rem;
+}
+
+.user-profile { display: flex; align-items: center; gap: 0.6rem; }
+.avatar { width: 30px; height: 30px; background: var(--secondary); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--text-dark); font-size: 0.85rem; }
+#userNameDisplay { font-size: 0.88rem; font-weight: 500; }
+.role-badge { font-size: 0.7rem; padding: 0.15rem 0.45rem; border-radius: 4px; background: var(--primary-light); color: var(--white); }
+
+/* =====================================================
+   9. ÁREA DE CONTEÚDO
+   ===================================================== */
+.content-area { padding: 1.2rem 1.5rem; flex: 1; }
+
+/* =====================================================
+   10. CARDS DE ESTATÍSTICAS
+   ===================================================== */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+.stat-card {
+    background: var(--white);
+    padding: 1.1rem 1.2rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-card i { font-size: 2rem; color: var(--secondary); }
+.stat-info h3 { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+.stat-value { font-size: 1.6rem; font-weight: 700; margin-top: 0.3rem; }
+
+/* =====================================================
+   11. TABELAS
+   ===================================================== */
+.table-container { background: var(--white); border-radius: 8px; box-shadow: var(--shadow); overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; text-align: left; min-width: 480px; }
+.data-table th, .data-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); }
+.data-table th { background: #F8FAFC; font-weight: 600; color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+.data-table tr:last-child td { border-bottom: none; }
+
+.badge { padding: 0.25rem 0.55rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.badge-pendente { background: #FEF3C7; color: #D97706; }
+.badge-aprovado { background: #D1FAE5; color: #059669; }
+.badge-urgente  { background: #FEE2E2; color: #DC2626; }
+.badge-aguardando { background: #E0F2FE; color: #0284C7; }
+
+/* =====================================================
+   12. FORMULÁRIOS
+   ===================================================== */
+.form-container { background: var(--white); padding: 1.5rem; border-radius: 8px; box-shadow: var(--shadow); max-width: 700px; }
+.form-container h3 { margin-bottom: 1.2rem; color: var(--primary); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; font-size: 1rem; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-group label { display: block; margin-bottom: 0.4rem; font-size: 0.82rem; font-weight: 600; color: var(--text-muted); }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.65rem 0.8rem; border: 1px solid var(--border); border-radius: 6px; outline: none; font-size: 0.88rem; transition: border-color 0.2s; font-family: inherit; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary); }
+.form-group textarea { resize: vertical; min-height: 80px; }
+
+/* =====================================================
+   13. CAMPANHAS
+   ===================================================== */
+.campaign-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+.card-campanha { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; position: relative; box-shadow: var(--shadow); transition: box-shadow 0.2s; }
+.card-campanha:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+.urgente-tag { position: absolute; top: -9px; right: -9px; background: var(--danger); color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.72rem; font-weight: 700; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+.card-campanha h3 { margin-bottom: 0.4rem; color: var(--primary); font-size: 0.95rem; }
+.card-campanha p, .campanha-desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.9rem; }
+/* Admin campanha card extras */
+.campanha-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem; gap: 0.5rem; }
+.campanha-card-header h3 { margin-bottom: 0; }
+.campanha-card-footer { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
+
+/* =====================================================
+   14. ESTADO VAZIO
+   ===================================================== */
+.empty-state { padding: 2rem; text-align: center; color: var(--text-muted); background: var(--white); border-radius: 8px; box-shadow: var(--shadow); }
+
+/* =====================================================
+   15. RESPONSIVIDADE
+   ===================================================== */
+
+/* Tablet */
+@media (max-width: 900px) {
+    :root { --sidebar-w: 200px; }
+    .cards-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* Mobile */
+@media (max-width: 650px) {
+    /* Sidebar vira gaveta */
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        width: 230px;
+    }
+    .sidebar.open { transform: translateX(0); }
+
+    .main-content { margin-left: 0; }
+
+    .btn-menu-toggle { display: block; }
+
+    /* Topbar compacta */
+    .topbar { padding: 0.7rem 1rem; }
+    #userNameDisplay { display: none; }
+
+    /* Conteúdo sem padding excessivo */
+    .content-area { padding: 1rem; }
+
+    /* Cards em coluna única */
+    .cards-grid { grid-template-columns: 1fr; gap: 0.8rem; }
+
+    /* Formulário em coluna única */
+    .form-grid { grid-template-columns: 1fr; }
+    .form-container { padding: 1.1rem; }
+
+    /* Campanhas em coluna única */
+    .campaign-cards { grid-template-columns: 1fr; }
+}
+
+/* =====================================================
+   16. TOAST DE NOTIFICAÇÃO
+   ===================================================== */
+#toastContainer {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.toast {
+    pointer-events: all;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    font-size: 0.88rem;
+    font-weight: 500;
+    min-width: 260px;
+    max-width: 380px;
+    color: var(--white);
+    animation: toastSlideIn 0.3s ease forwards;
+}
+
+@keyframes toastSlideIn {
+    from { opacity: 0; transform: translateX(40px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.toast-success { background: #059669; }
+.toast-error   { background: #DC2626; }
+.toast-info    { background: var(--primary); }
+
+.toast i:first-child { font-size: 1rem; flex-shrink: 0; }
+.toast span { flex: 1; line-height: 1.4; }
+
+.toast-close {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.8);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.1rem 0.2rem;
+    flex-shrink: 0;
+    transition: color 0.15s;
+}
+.toast-close:hover { color: var(--white); }
+
+/* Spinner em botões de loading */
+@keyframes spin { to { transform: rotate(360deg); } }
+.fa-spin { animation: spin 0.8s linear infinite; }
+
+/* =====================================================
+   MODAL — Ver Itens Prioritários (Aluno)
+   ===================================================== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+    animation: fadeIn 0.18s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-box {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 520px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 1.75rem;
+    animation: scaleIn 0.18s ease;
+}
+@keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+.modal-header h3 { font-size: 1.1rem; color: var(--primary); }
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    transition: background 0.15s, color 0.15s;
+}
+.modal-close:hover { background: var(--secondary); color: var(--danger); }
+
+.modal-itens-lista {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.modal-item-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.9rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+    border-left: 3px solid var(--primary-light);
+    flex-wrap: wrap;
+}
+.modal-item-nome { flex: 1; font-weight: 500; min-width: 140px; }
+.modal-item-nome i { color: var(--primary-light); margin-right: 0.4rem; }
+
+/* =====================================================
+   BOTÃO SECUNDÁRIO — Cancelar edição
+   ===================================================== */
+.btn-secondary {
+    width: 100%;
+    background: var(--secondary);
+    color: var(--text-dark);
+    padding: 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+.btn-secondary:hover { background: var(--border); }
+
+/* =====================================================
+   RELATÓRIOS — KPI cards e tabela
+   ===================================================== */
+.relatorio-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+/* =====================================================
+   BOTÕES DE AÇÃO NOS CARDS DE CAMPANHA
+   ===================================================== */
+.campanha-card-footer {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+.campanha-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 0.4rem;
+}
+.btn-icon {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.35rem 0.55rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    color: var(--text-muted);
+    line-height: 1;
+}
+.btn-icon.edit:hover  { background: rgba(10,58,96,0.08); color: var(--primary); border-color: var(--primary-light); }
+.btn-icon.times:hover { background: rgba(235,87,87,0.1);  color: var(--danger);  border-color: var(--danger); }
+.btn-icon:disabled    { opacity: 0.4; cursor: not-allowed; }
+
+/* =====================================================
+   MINI-LISTA DE ITENS NO CARD DE CAMPANHA
+   ===================================================== */
+.card-itens-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0.5rem 0 0;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+}
+
+/* =====================================================
+   ITENS PRIORITÁRIOS DINÂMICOS — formulário
+   ===================================================== */
+.itens-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+.itens-header label { font-weight: 600; font-size: 0.88rem; }
+
+.btn-add-item {
+    background: none;
+    border: 1px dashed var(--primary-light);
+    color: var(--primary-light);
+    border-radius: 6px;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+.btn-add-item:hover { background: rgba(10,58,96,0.07); color: var(--primary); }
+
+.lista-itens-dinamica {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.item-dinamico-row {
+    display: grid;
+    grid-template-columns: 1fr 90px 100px 36px;
+    gap: 0.4rem;
+    align-items: center;
+}
+.item-dinamico-row input,
+.item-dinamico-row select {
+    padding: 0.45rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.83rem;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+}
+.item-dinamico-row input:focus,
+.item-dinamico-row select:focus { border-color: var(--primary); }
+
+/* =====================================================
+   BARRA DE PESQUISA NA TOPBAR (RF13)
+   ===================================================== */
+.topbar-search {
+    position: relative;
+    margin: 0 1.5rem;
+    flex: 1;
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+}
+.topbar-search i {
+    position: absolute;
+    left: 0.75rem;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    pointer-events: none;
+}
+.topbar-search input {
+    width: 100%;
+    padding: 0.5rem 0.75rem 0.5rem 2.2rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background-color: var(--secondary);
+    color: var(--text-dark);
+    font-size: 0.88rem;
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+.topbar-search input:focus {
+    border-color: var(--primary);
+    background-color: var(--card-bg);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    outline: none;
+}

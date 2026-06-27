@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COPER FMP | Gestão de Doações</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- views/shared/login.html -->
+    <div id="loginView" class="view-container active">
+        <div class="login-box">
+
+            <!-- ── PAINEL 1: LOGIN ── -->
+            <div id="painelLogin">
+                <div class="logo-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                <h1>COPER - FMP</h1>
+                <p>Acesso ao Sistema de Doações</p>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="text" id="email" placeholder="E-mail Institucional" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="senha" placeholder="Senha" required>
+                    </div>
+                    <button type="submit" class="btn-primary" id="btnEntrar">Entrar</button>
+                </form>
+                <div class="login-links">
+                    <button class="link-btn" id="linkEsqueciSenha">Esqueci minha senha</button>
+                    <span class="link-sep">·</span>
+                    <button class="link-btn" id="linkCriarConta">Criar conta</button>
+                </div>
+                <div class="demo-credentials">
+                    <span><strong>Admin:</strong> admin@fmp.edu.br / admin123</span><br>
+                    <span><strong>Aluno:</strong> aluno@aluno.fmpsc.edu.br / aluno</span>
+                </div>
+            </div>
+
+            <!-- ── PAINEL 2: CRIAR CONTA ── -->
+            <div id="painelCadastro" class="hidden">
+                <div class="logo-icon"><i class="fa-solid fa-user-plus"></i></div>
+                <h1>Criar Conta</h1>
+                <p>Cadastro exclusivo para alunos FMP</p>
+                <form id="formCadastro" novalidate>
+                    <div class="input-group">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="cadastroNome" placeholder="Nome completo" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-id-card"></i>
+                        <input type="text" id="cadastroCpf" placeholder="CPF (somente números)" maxlength="11" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="cadastroEmail" placeholder="E-mail (@aluno.fmpsc.edu.br)" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <input type="text" id="cadastroMatricula" placeholder="Matrícula" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-book"></i>
+                        <input type="text" id="cadastroCurso" placeholder="Curso (ex: Análise e Desenvolvimento de Sistemas)" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="cadastroSenha" placeholder="Senha (mín. 6 caracteres)" minlength="6" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="cadastroConfirmarSenha" placeholder="Confirmar senha" required>
+                    </div>
+                    <button type="submit" class="btn-primary" id="btnCadastrar">
+                        <i class="fa-solid fa-user-check"></i> Cadastrar
+                    </button>
+                </form>
+                <div class="login-links">
+                    <button class="link-btn" id="linkVoltarLogin1">← Voltar ao login</button>
+                </div>
+            </div>
+
+            <!-- ── PAINEL 3: ESQUECI A SENHA ── -->
+            <div id="painelEsqueciSenha" class="hidden">
+                <div class="logo-icon"><i class="fa-solid fa-key"></i></div>
+                <h1>Recuperar Acesso</h1>
+                <p>Informe seu e-mail institucional para redefinir a senha</p>
+                <form id="formEsqueciSenha" novalidate>
+                    <div class="input-group">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="recuperarEmail" placeholder="E-mail institucional" required>
+                    </div>
+                    <div class="input-group hidden" id="grupaNovaSenha">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="recuperarNovaSenha" placeholder="Nova senha (mín. 6 caracteres)" minlength="6">
+                    </div>
+                    <button type="submit" class="btn-primary" id="btnRecuperar">
+                        <i class="fa-solid fa-magnifying-glass"></i> Buscar conta
+                    </button>
+                </form>
+                <div id="recuperarResultado"></div>
+                <div class="login-links">
+                    <button class="link-btn" id="linkVoltarLogin2">← Voltar ao login</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- APP -->
+    <div id="appView" class="view-container layout-app hidden">
+
+        <!-- Overlay mobile (fecha sidebar ao clicar fora) -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- views/shared/sidebar.html -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-hand-holding-heart"></i>
+                <span>COPER FMP</span>
+            </div>
+            <ul class="sidebar-menu" id="menuAdmin" style="display: none;">
+                <li class="active" data-target="dashboardAdmin"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
+                <li data-target="registrarDoacao"><i class="fa-solid fa-plus-circle"></i> Registrar Doação</li>
+                <li data-target="validarDoacoes"><i class="fa-solid fa-clipboard-check"></i> Validar Doações</li>
+                <li data-target="campanhasAdmin"><i class="fa-solid fa-bullhorn"></i> Campanhas</li>
+                <li data-target="itensPrioritariosAdmin"><i class="fa-solid fa-star"></i> Itens Prioritários</li>
+                <li data-target="relatoriosAdmin"><i class="fa-solid fa-chart-bar"></i> Relatórios</li>
+                <li data-target="editarPerfil"><i class="fa-solid fa-user-gear"></i> Editar Perfil</li>
+            </ul>
+            <ul class="sidebar-menu" id="menuAluno" style="display: none;">
+                <li class="active" data-target="dashboardAluno"><i class="fa-solid fa-user-graduate"></i> Meu Painel</li>
+                <li data-target="campanhasAluno"><i class="fa-solid fa-bullhorn"></i> Campanhas Ativas</li>
+                <li data-target="historicoAluno"><i class="fa-solid fa-clock-rotate-left"></i> Meu Histórico</li>
+                <li data-target="editarPerfil"><i class="fa-solid fa-user-gear"></i> Editar Perfil</li>
+            </ul>
+            <div class="sidebar-footer">
+                <button id="btnLogout" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+
+            <!-- views/shared/topbar.html -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="btn-menu-toggle" id="btnMenuToggle">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <h2 id="pageTitle">Bem-vindo</h2>
+                </div>
+                <!-- Barra de pesquisa genérica (RF13) -->
+                <div class="topbar-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="topbarSearchInput" placeholder="Pesquisar nesta página...">
+                </div>
+                <div class="user-profile">
+                    <!-- Ícone de Sino e Dropdown de Notificações (RF09) -->
+                    <div class="notification-container" id="notificacoesDropdownContainer" style="position:relative;margin-right:1rem;display:none;">
+                        <button class="btn-icon" id="btnNotificacoes" title="Notificações" style="position:relative;padding:0.4rem 0.6rem;background:none;border:none;cursor:pointer;line-height:1;">
+                            <i class="fa-solid fa-bell" style="font-size:1.15rem;color:var(--text-muted);"></i>
+                            <span class="notification-badge hidden" id="badgeNotificacoes" style="position:absolute;top:-2px;right:-2px;background-color:var(--danger);color:#fff;border-radius:50%;padding:2px 5px;font-size:0.6rem;font-weight:bold;line-height:1;">0</span>
+                        </button>
+                        <div class="notifications-dropdown hidden" id="dropdownNotificacoes" style="position:absolute;top:100%;right:0;width:300px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:1000;margin-top:0.5rem;padding:0.5rem;max-height:300px;overflow-y:auto;">
+                            <p class="text-muted" style="text-align:center;font-size:0.8rem;margin:0.5rem 0;">Sem novas notificações.</p>
+                        </div>
+                    </div>
+                    <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                    <span id="userNameDisplay">Usuário</span>
+                    <span class="role-badge" id="userRoleDisplay">Role</span>
+                </div>
+            </header>
+
+            <div class="content-area">
+
+                <!-- ADMIN -->
+
+                <!-- views/admin/dashboard.html -->
+                <section id="dashboardAdmin" class="page-section active">
+                    <div class="cards-grid">
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Doações Pendentes</h3>
+                                <p class="stat-value text-warning" id="countPendentes">0</p>
+                            </div>
+                            <i class="fa-solid fa-hourglass-half"></i>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Horas Concedidas</h3>
+                                <p class="stat-value text-success" id="countHoras">0</p>
+                            </div>
+                            <i class="fa-solid fa-award"></i>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- views/admin/registrar-doacao.html -->
+                <section id="registrarDoacao" class="page-section hidden">
+                    <div class="form-container">
+                        <h3>Registrar Nova Doação</h3>
+                        <form id="formRegistro">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="matriculaInput">Matrícula do Aluno</label>
+                                    <input type="text" id="matriculaInput" placeholder="Ex: 19875">
+                                </div>
+                                <div class="form-group">
+                                    <label for="campanhaSelect">Campanha</label>
+                                    <select id="campanhaSelect" required>
+                                        <option value="">Carregando campanhas...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tipoItemInput">Tipo de Item</label>
+                                    <input type="text" id="tipoItemInput" placeholder="Ex: Casaco, 1kg Arroz" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="quantidadeInput">Quantidade</label>
+                                    <input type="number" id="quantidadeInput" min="1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="localEntregaInput">Local de Entrega</label>
+                                    <input type="text" id="localEntregaInput" placeholder="Ex: Central de Doações Bloco B" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="evidenciaInput">Foto / Evidência</label>
+                                    <input type="file" id="evidenciaInput" accept="image/*">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary" style="margin-top:1rem;"><i class="fa-solid fa-floppy-disk"></i> Salvar Registro</button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- views/admin/validar-doacoes.html -->
+                <section id="validarDoacoes" class="page-section hidden">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Data</th><th>Aluno</th><th>Item</th>
+                                    <th>Qtd</th><th>Status</th><th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableValidacaoBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- views/admin/campanhas.html -->
+                <section id="campanhasAdmin" class="page-section hidden">
+                    <div class="form-container" style="margin-bottom:1.5rem;">
+                        <h3>Nova Campanha</h3>
+                        <form id="formNovaCampanha">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Título da Campanha</label>
+                                    <input type="text" id="campanhaTitulo" placeholder="Ex: Agasalho Solidário" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Data Limite (opcional)</label>
+                                    <input type="date" id="campanhaLimite">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Descrição</label>
+                                <textarea id="campanhaDesc" rows="3" placeholder="Descreva a campanha..."></textarea>
+                            </div>
+                            <!-- ITENS PRIORITÁRIOS DINÂMICOS -->
+                            <div class="form-group" style="margin-top:0.5rem;">
+                                <div class="itens-header">
+                                    <label><i class="fa-solid fa-star"></i> Itens Prioritários da Campanha</label>
+                                    <button type="button" class="btn-add-item" id="btnAdicionarItemNova">
+                                        <i class="fa-solid fa-plus"></i> Adicionar Item
+                                    </button>
+                                </div>
+                                <div id="listaItensNovaCampanha" class="lista-itens-dinamica">
+                                    <p class="text-muted" style="font-size:0.82rem;margin-top:0.4rem;">
+                                        Nenhum item adicionado. Clique em "+ Adicionar Item" para incluir.
+                                    </p>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary" style="margin-top:0.75rem;"><i class="fa-solid fa-plus"></i> Criar Campanha</button>
+                        </form>
+                    </div>
+                    <h3 style="margin-bottom:1rem;">Campanhas Cadastradas</h3>
+                    <div class="campaign-cards" id="listaCampanhasAdmin"></div>
+                </section>
+
+                <!-- views/admin/itens-prioritarios.html -->
+                <section id="itensPrioritariosAdmin" class="page-section hidden">
+                    <div class="form-container" style="margin-bottom:1.5rem;">
+                        <h3 id="tituloFormItem">Novo Item Prioritário</h3>
+                        <form id="formItemPrioritario">
+                            <input type="hidden" id="itemIdEdicao">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="itemNome">Nome do Item</label>
+                                    <input type="text" id="itemNome" placeholder="Ex: Agasalo adulto, Arroz 1kg" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="itemMeta">Meta (unidades)</label>
+                                    <input type="number" id="itemMeta" min="1" placeholder="Ex: 50">
+                                </div>
+                                <div class="form-group">
+                                    <label for="itemUrgencia">Urgência</label>
+                                    <select id="itemUrgencia">
+                                        <option value="NORMAL">Normal</option>
+                                        <option value="MEDIA">Média</option>
+                                        <option value="ALTA">Alta</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="display:flex;gap:0.75rem;margin-top:0.75rem;">
+                                <button type="submit" class="btn-primary" style="flex:1;">
+                                    <i class="fa-solid fa-floppy-disk"></i> Salvar Item
+                                </button>
+                                <button type="button" id="btnCancelarEdicaoItem"
+                                        class="btn-secondary hidden" style="flex:1;">
+                                    <i class="fa-solid fa-xmark"></i> Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <h3 style="margin-bottom:1rem;">Itens Cadastrados</h3>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th><th>Meta</th><th>Urgência</th><th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableItensBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- views/admin/relatorios.html -->
+                <section id="relatoriosAdmin" class="page-section hidden">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+                        <h3 style="margin:0;">Relatórios Consolidados</h3>
+                        <button class="btn-primary" id="btnExportarRelatorioPDF" style="margin:0;">
+                            <i class="fa-solid fa-file-pdf"></i> Exportar PDF
+                        </button>
+                    </div>
+                    <div class="relatorio-kpis">
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Total de Doações</h3>
+                                <p class="stat-value" id="relTotalDoacoes">—</p>
+                            </div>
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Aprovadas</h3>
+                                <p class="stat-value text-success" id="relTotalAprovadas">—</p>
+                            </div>
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Reprovadas</h3>
+                                <p class="stat-value text-danger" id="relTotalReprovadas">—</p>
+                            </div>
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Pendentes</h3>
+                                <p class="stat-value text-warning" id="relTotalPendentes">—</p>
+                            </div>
+                            <i class="fa-solid fa-hourglass-half"></i>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Horas Concedidas</h3>
+                                <p class="stat-value text-primary" id="relTotalHoras">—</p>
+                            </div>
+                            <i class="fa-solid fa-award"></i>
+                        </div>
+                    </div>
+                    <h3 style="margin:1.5rem 0 1rem;">Doações por Campanha</h3>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Campanha</th><th>Total de Doações</th><th>Horas Concedidas</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableRelatorioBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ALUNO -->
+
+                <!-- views/aluno/dashboard.html -->
+                <section id="dashboardAluno" class="page-section hidden">
+                    <div class="cards-grid">
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                 <h3>Saldo de Horas</h3>
+                                 <p class="stat-value text-primary" id="saldoHorasAluno">0h</p>
+                             </div>
+                             <i class="fa-solid fa-clock"></i>
+                         </div>
+                         <div class="stat-card">
+                             <div class="stat-info">
+                                 <h3>Doações Realizadas</h3>
+                                 <p class="stat-value" id="doacoesRealizadasAluno">0</p>
+                            </div>
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- views/aluno/campanhas.html -->
+                <section id="campanhasAluno" class="page-section hidden">
+                    <div class="campaign-cards" id="listaCampanhas"></div>
+                </section>
+
+                <!-- views/aluno/historico.html -->
+                <section id="historicoAluno" class="page-section hidden">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Data</th><th>Campanha</th><th>Horas</th>
+                                    <th>Status</th><th>Comprovante</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableHistoricoBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- COMPARTILHADO -->
+
+                <!-- views/shared/editar-perfil.html -->
+                <section id="editarPerfil" class="page-section hidden">
+                    <div class="form-container">
+                        <h3>Editar Meu Perfil</h3>
+                        <form id="formPerfil">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Nome Completo</label>
+                                    <input type="text" id="perfilNome" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>E-mail de Acesso</label>
+                                    <input type="email" id="perfilEmail" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nova Senha</label>
+                                    <input type="password" id="perfilSenha" placeholder="Deixe em branco para manter a atual">
+                                </div>
+                                <div class="form-group">
+                                    <label id="labelIdentificador">Documento de Identificação</label>
+                                    <input type="text" id="perfilIdentificador" readonly
+                                        style="background-color:var(--secondary);cursor:not-allowed;">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary" style="margin-top:1rem;">Salvar Alterações</button>
+                        </form>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Editar Campanha (Admin) UC13 -->
+    <div id="modalEditarCampanha" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modalEditarTitle">
+        <div class="modal-box" style="max-width:600px;">
+            <div class="modal-header">
+                <h3 id="modalEditarTitle"><i class="fa-solid fa-pen-to-square"></i> Editar Campanha</h3>
+                <button class="modal-close" id="btnFecharModalEditar" aria-label="Fechar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="formEditarCampanha" novalidate>
+                <input type="hidden" id="editarCampanhaId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="editarTitulo">Título</label>
+                        <input type="text" id="editarTitulo" placeholder="Título da campanha" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editarLimite">Data Limite</label>
+                        <input type="date" id="editarLimite">
+                    </div>
+                    <div class="form-group">
+                        <label for="editarStatus">Status</label>
+                        <select id="editarStatus">
+                            <option value="Ativa">Ativa</option>
+                            <option value="Encerrada">Encerrada</option>
+                            <option value="Urgente">Urgente</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editarLimiteHoras">Limite de Horas</label>
+                        <input type="number" id="editarLimiteHoras" min="0" step="0.5" placeholder="Ex: 20">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editarDesc">Descrição</label>
+                    <textarea id="editarDesc" rows="3"></textarea>
+                </div>
+                <!-- Itens Prioritários no modal de edição -->
+                <div class="form-group">
+                    <div class="itens-header">
+                        <label><i class="fa-solid fa-star"></i> Itens Prioritários</label>
+                        <button type="button" class="btn-add-item" id="btnAdicionarItemEditar">
+                            <i class="fa-solid fa-plus"></i> Adicionar
+                        </button>
+                    </div>
+                    <div id="listaItensEditarCampanha" class="lista-itens-dinamica"></div>
+                </div>
+                <button type="submit" class="btn-primary" style="margin-top:0.75rem;">
+                    <i class="fa-solid fa-floppy-disk"></i> Salvar Alterações
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Ver Itens Prioritários (Aluno) -->
+    <div id="modalItensPrioritarios" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modalItensTitle">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modalItensTitle"><i class="fa-solid fa-star"></i> Itens Prioritários</h3>
+                <button class="modal-close" id="btnFecharModalItens" aria-label="Fechar modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <p id="modalItensCampanhaNome" class="text-muted" style="margin-bottom:1rem;font-size:0.85rem;"></p>
+            <div id="modalItensLista"></div>
+        </div>
+    </div>
+
+    <!-- Modal: Editar Doação (Admin) -->
+    <div id="modalEditarDoacao" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modalEditarDoacaoTitle">
+        <div class="modal-box" style="max-width:500px;">
+            <div class="modal-header">
+                <h3 id="modalEditarDoacaoTitle"><i class="fa-solid fa-pen-to-square"></i> Editar Doação</h3>
+                <button class="modal-close" id="btnFecharModalEditarDoacao" aria-label="Fechar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="formEditarDoacao">
+                <input type="hidden" id="editarDoacaoId">
+                <div class="form-group">
+                    <label for="editarDoacaoMatricula">Matrícula do Aluno</label>
+                    <input type="text" id="editarDoacaoMatricula" placeholder="Ex: 19875">
+                </div>
+                <div class="form-group">
+                    <label for="editarDoacaoTipoItem">Tipo de Item</label>
+                    <input type="text" id="editarDoacaoTipoItem" placeholder="Ex: Casaco" required>
+                </div>
+                <div class="form-group">
+                    <label for="editarDoacaoQuantidade">Quantidade</label>
+                    <input type="number" id="editarDoacaoQuantidade" min="1" required>
+                </div>
+                <button type="submit" class="btn-primary" style="margin-top:1rem;">
+                    <i class="fa-solid fa-floppy-disk"></i> Salvar Alterações
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast de notificação global -->
+    <div id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Configuração global (API_BASE_URL) — deve ser o PRIMEIRO script -->
+    <script src="js/config.js"></script>
+    <!-- Model -->
+    <script src="js/model/UsuarioModel.js"></script>
+    <script src="js/model/CampanhaModel.js"></script>
+    <script src="js/model/DoacaoModel.js"></script>
+    <script src="js/model/ItemPrioritarioModel.js"></script>
+    <script src="js/model/RelatorioModel.js"></script>
+    <script src="js/model/NotificacaoModel.js"></script>
+    <!-- Views compartilhadas -->
+    <script src="js/view/shared/LoginView.js"></script>
+    <script src="js/view/shared/SidebarView.js"></script>
+    <script src="js/view/shared/TopbarView.js"></script>
+    <!-- Views Admin -->
+    <script src="js/view/admin/DashboardAdminView.js"></script>
+    <script src="js/view/admin/ValidarDoacoesView.js"></script>
+    <script src="js/view/admin/RegistrarDoacaoView.js"></script>
+    <script src="js/view/admin/CampanhasAdminView.js"></script>
+    <script src="js/view/admin/ItensPrioritariosAdminView.js"></script>
+    <script src="js/view/admin/RelatoriosAdminView.js"></script>
+    <!-- Views Aluno -->
+    <script src="js/view/aluno/DashboardAlunoView.js"></script>
+    <script src="js/view/aluno/CampanhasAlunoView.js"></script>
+    <script src="js/view/aluno/HistoricoAlunoView.js"></script>
+    <!-- Controller -->
+    <script src="js/controller/DoacaoController.js"></script>
+
+    <!-- Menu mobile toggle -->
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const toggle  = document.getElementById('btnMenuToggle');
+
+        function fecharSidebar() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+
+        toggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', fecharSidebar);
+
+        // Fecha ao navegar no mobile
+        document.querySelectorAll('.sidebar-menu li').forEach(li => {
+            li.addEventListener('click', () => {
+                if (window.innerWidth <= 650) fecharSidebar();
+            });
+        });
+    </script>
+</body>
+</html>

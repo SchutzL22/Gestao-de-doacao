@@ -1,0 +1,24 @@
+<!-- views/shared/topbar.html -->
+<header class="topbar">
+    <h2 id="pageTitle">Bem-vindo</h2>
+    <!-- Barra de pesquisa genérica (RF13) -->
+    <div class="topbar-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="topbarSearchInput" placeholder="Pesquisar nesta página...">
+    </div>
+    <div class="user-profile">
+        <!-- Ícone de Sino e Dropdown de Notificações (RF09) -->
+        <div class="notification-container" id="notificacoesDropdownContainer" style="position:relative;margin-right:1rem;display:none;">
+            <button class="btn-icon" id="btnNotificacoes" title="Notificações" style="position:relative;padding:0.4rem 0.6rem;background:none;border:none;cursor:pointer;line-height:1;">
+                <i class="fa-solid fa-bell" style="font-size:1.15rem;color:var(--text-muted);"></i>
+                <span class="notification-badge hidden" id="badgeNotificacoes" style="position:absolute;top:-2px;right:-2px;background-color:var(--danger);color:#fff;border-radius:50%;padding:2px 5px;font-size:0.6rem;font-weight:bold;line-height:1;">0</span>
+            </button>
+            <div class="notifications-dropdown hidden" id="dropdownNotificacoes" style="position:absolute;top:100%;right:0;width:300px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:1000;margin-top:0.5rem;padding:0.5rem;max-height:300px;overflow-y:auto;">
+                <p class="text-muted" style="text-align:center;font-size:0.8rem;margin:0.5rem 0;">Sem novas notificações.</p>
+            </div>
+        </div>
+        <div class="avatar"><i class="fa-solid fa-user"></i></div>
+        <span id="userNameDisplay">Usuário</span>
+        <span class="role-badge" id="userRoleDisplay">Role</span>
+    </div>
+</header>

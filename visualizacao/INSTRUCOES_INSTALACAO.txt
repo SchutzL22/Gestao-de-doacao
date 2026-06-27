@@ -1,0 +1,86 @@
+================================================================================
+              GUIA DE INSTALAÇÃO E UTILIZAÇÃO - COPER FMP
+================================================================================
+
+Este guia passo a passo foi elaborado para orientar os desenvolvedores e
+homologadores no processo de configuração do banco de dados, inicialização do
+backend e execução do frontend da aplicação.
+
+--------------------------------------------------------------------------------
+A) COMO CONFIGURAR O BANCO DE DADOS LOCAL (Ex: via HeidiSQL)
+--------------------------------------------------------------------------------
+1. Certifique-se de que o servidor MySQL está ativo localmente.
+2. Abre seu cliente de banco de dados (ex: HeidiSQL ou MySQL Workbench) e 
+   conecte-se ao seu servidor.
+3. Carregue e execute o script "criacaodobanco.sql" para criar o banco de dados
+   "db_gestaodedoacao" caso ele não exista.
+4. Inicialize o backend Spring Boot pelo menos uma vez (veja o passo B) para que as
+   tabelas e os relacionamentos do banco sejam gerados automaticamente pelo Hibernate.
+5. Em seguida, carregue e execute o arquivo "criacaodeusuarios.sql" no HeidiSQL
+   para carregar o Administrador Geral e os alunos de teste no banco.
+
+--------------------------------------------------------------------------------
+B) COMO INICIALIZAR O BACKEND SPRING BOOT
+--------------------------------------------------------------------------------
+1. Abra o terminal (PowerShell, CMD ou Bash) e navegue até a pasta "backend" do 
+   projeto.
+2. Certifique-se de que as configurações de usuário e senha do banco em 
+   "backend/src/main/resources/application.properties" correspondem às
+   suas credenciais locais do MySQL (usuario 'root' e senha '2601').
+3. Execute o comando de compilação e inicialização:
+   .\mvnw.cmd spring-boot:run (no Windows)
+   ou
+   ./mvnw spring-boot:run (no Linux/macOS)
+4. Aguarde a confirmação no console: "Started DemoApplication..."
+   O servidor estará escutando requisições na porta 8080 (http://localhost:8080).
+
+--------------------------------------------------------------------------------
+C) COMO EXECUTAR O FRONTEND
+--------------------------------------------------------------------------------
+1. Abra a pasta do projeto no VS Code.
+2. Se ainda não possui, instale a extensão "Live Server" (criada por Ritwick Dey).
+3. Abra o arquivo "frontend/index.html".
+4. Clique com o botão direito sobre o arquivo "index.html" no explorador e
+   selecione "Open with Live Server" (ou clique em "Go Live" na barra inferior).
+5. O navegador abrirá a aplicação em http://127.0.0.1:5500 (ou porta equivalente).
+
+--------------------------------------------------------------------------------
+D) CREDENCIAIS DE ACESSO INICIAIS
+--------------------------------------------------------------------------------
+Utilize as credenciais abaixo para testar as permissões de acesso:
+
+• Administrador Geral:
+  - E-mail: admin@fmpsc.edu.br
+  - Senha Provisória: admin123
+
+• Aluno Davi:
+  - E-mail: davi@aluno.fmpsc.edu.br
+  - Senha Provisória: davi123
+
+• Aluno Eduardo:
+  - E-mail: eduardo@aluno.fmpsc.edu.br
+  - Senha Provisória: eduardo123
+
+• Aluno Lucas Schutz:
+  - E-mail: lucas@aluno.fmpsc.edu.br
+  - Senha Provisória: lucas123
+
+• Aluno Vitor:
+  - E-mail: vitor@aluno.fmpsc.edu.br
+  - Senha Provisória: vitor123
+
+*Nota: Todas as senhas acima encontram-se previamente criptografadas em BCrypt
+no script "criacaodeusuarios.sql" para fins de conformidade com a LGPD.
+
+--------------------------------------------------------------------------------
+E) REQUISITO OBRIGATÓRIO — ALTERAÇÃO DE SENHA PROVISÓRIA
+--------------------------------------------------------------------------------
+[ATENÇÃO - IMPORTANTE]
+Logo após realizar o primeiro acesso ao sistema com a sua credencial descrita acima,
+o usuário DEVE, obrigatoriamente, realizar os seguintes passos:
+1. Clicar no menu lateral e selecionar "Editar Perfil".
+2. Inserir o seu nome e digitar uma nova senha forte (mínimo de 8 caracteres,
+   contendo obrigatoriamente letras e números, de acordo com as regras de
+   segurança de senhas do sistema).
+3. Clicar em "Salvar Alterações".
+================================================================================

@@ -1,0 +1,30 @@
+<!-- views/shared/sidebar.html -->
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <i class="fa-solid fa-hand-holding-heart"></i>
+        <span>COPER FMP</span>
+    </div>
+
+    <!-- Menu do Administrador -->
+    <ul class="sidebar-menu" id="menuAdmin" style="display: none;">
+        <li class="active" data-target="dashboardAdmin"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
+        <li data-target="registrarDoacao"><i class="fa-solid fa-plus-circle"></i> Registrar Doação</li>
+        <li data-target="validarDoacoes"><i class="fa-solid fa-clipboard-check"></i> Validar Doações</li>
+        <li data-target="campanhasAdmin"><i class="fa-solid fa-bullhorn"></i> Campanhas</li>
+        <li data-target="editarPerfil"><i class="fa-solid fa-user-gear"></i> Editar Perfil</li>
+    </ul>
+
+    <!-- Menu do Aluno -->
+    <ul class="sidebar-menu" id="menuAluno" style="display: none;">
+        <li class="active" data-target="dashboardAluno"><i class="fa-solid fa-user-graduate"></i> Meu Painel</li>
+        <li data-target="campanhasAluno"><i class="fa-solid fa-bullhorn"></i> Campanhas Ativas</li>
+        <li data-target="historicoAluno"><i class="fa-solid fa-clock-rotate-left"></i> Meu Histórico</li>
+        <li data-target="editarPerfil"><i class="fa-solid fa-user-gear"></i> Editar Perfil</li>
+    </ul>
+
+    <div class="sidebar-footer">
+        <button id="btnLogout" class="btn-logout">
+            <i class="fa-solid fa-right-from-bracket"></i> Sair
+        </button>
+    </div>
+</aside>
