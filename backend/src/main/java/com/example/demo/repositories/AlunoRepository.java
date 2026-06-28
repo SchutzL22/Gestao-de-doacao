@@ -14,4 +14,7 @@ public interface AlunoRepository extends JpaRepository<Aluno, Long> {
 
     /** Busca um aluno pelo número de matrícula. */
     Optional<Aluno> findByMatricula(String matricula);
+
+    /** Verifica existência de um aluno com CPF específico. */
+    boolean existsByCpf(String cpf);
 }

@@ -18,4 +18,7 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> 
 
     /** Verifica existência de um funcionário com e-mail específico. */
     boolean existsByEmail(String email);
+
+    /** Verifica existência de um funcionário com CPF específico. */
+    boolean existsByCpf(String cpf);
 }

@@ -39,8 +39,20 @@ const DoacaoController = (() => {
     // INIT — inicializa bindings e restaura sessão do localStorage
     // ─────────────────────────────────────────────────────────────────────────
     function init() {
+        // ── ROUTE GUARD ───────────────────────────────────────────────────────
+        // Verifica sessão apenas se o appView já estiver visível (reload direto
+        // na área autenticada). Se não houver sessão válida, o guard força o
+        // loginView antes de qualquer binding de views protegidas.
+        const appView = document.getElementById('appView');
+        if (appView && !appView.classList.contains('hidden')) {
+            if (!RouteGuard.verificar()) return;
+        }
+
         LoginView.bindSubmit(_handleLogin);
         SidebarView.bindLogout(_handleLogout);
+        if (TopbarView.bindLogout) {
+            TopbarView.bindLogout(_handleLogout);
+        }
         RegistrarDoacaoView.bindSubmit(_handleRegistroDoacao);
         CampanhasAdminView.bindNovaCampanha(_handleNovaCampanha);
         CampanhasAdminView.bindFormEdicao(_handleSalvarEdicaoCampanha);
@@ -111,6 +123,7 @@ const DoacaoController = (() => {
         }
     }
 
+
     // Tarefa 1: registra o listener do formulário de perfil uma única vez no init
     function _bindEditarPerfil() {
         const form = document.getElementById('formPerfil');
@@ -159,13 +172,17 @@ const DoacaoController = (() => {
     function _handleLogout() {
         UsuarioModel.limparSessao();
         sessaoAtual = null;
-        LoginView.mostrarLogin();
+        RouteGuard.redirecionarParaLogin('Logout realizado pelo utilizador.');
     }
+
 
     // ─────────────────────────────────────────────────────────────────────────
     // INICIALIZAÇÃO DA SESSÃO
     // ─────────────────────────────────────────────────────────────────────────
     async function _iniciarSessao(usuario) {
+        // ── ROUTE GUARD: valida tipo do utilizador ────────────────────────────
+        if (!RouteGuard.exigirTipo(usuario.tipo)) return;
+
         LoginView.mostrarApp();
         TopbarView.exibirUsuario(usuario.nome, usuario.role, usuario.tipo);
         SidebarView.configurarPorTipo(usuario.tipo);
@@ -209,6 +226,7 @@ const DoacaoController = (() => {
             _toast(error.message || 'Erro ao carregar dados do servidor. Verifique se o backend está em execução.', 'error');
         }
     }
+
 
     // ─────────────────────────────────────────────────────────────────────────
     // TAREFA 3: NAVEGAÇÃO — fetch e renderização ao trocar de seção

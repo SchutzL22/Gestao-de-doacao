@@ -241,8 +241,15 @@ public class UsuarioService {
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com este e-mail!"));
 
         // Verifica se a conta está no período de bloqueio temporário
-        if (usuario.getBloqueadoAte() != null && usuario.getBloqueadoAte().isAfter(java.time.LocalDateTime.now())) {
-            throw new IllegalArgumentException("Conta temporariamente bloqueada devido a excesso de tentativas. Tente novamente mais tarde.");
+        if (usuario.getBloqueadoAte() != null) {
+            if (usuario.getBloqueadoAte().isAfter(java.time.LocalDateTime.now())) {
+                throw new IllegalArgumentException("Conta temporariamente bloqueada devido a excesso de tentativas. Tente novamente mais tarde.");
+            } else {
+                // Período de bloqueio já expirou, reseta o contador de falhas e o bloqueio
+                usuario.setTentativasFalhas(0);
+                usuario.setBloqueadoAte(null);
+                usuarioRepository.save(usuario);
+            }
         }
 
         if (!passwordEncoder.matches(senha, usuario.getSenha())) {

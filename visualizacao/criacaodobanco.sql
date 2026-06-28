@@ -105,3 +105,6 @@ CREATE TABLE registros_edicao (
     FOREIGN KEY (doacao_id) REFERENCES doacoes(id),
     FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
 );
+
+
+ALTER TABLE doacoes ADD COLUMN local_entrega VARCHAR(255);

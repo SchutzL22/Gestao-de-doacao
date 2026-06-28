@@ -19,6 +19,24 @@ const LoginView = (() => {
     loginForm.querySelector('button[type="submit"]').insertAdjacentElement('afterend', errMsg);
     loginForm.addEventListener('input', () => { errMsg.style.display = 'none'; });
 
+    // ── Toggle mostrar/ocultar senha ───────────────────────────────────────
+    const toggleSenhaBtn  = document.getElementById('toggleSenha');
+    const toggleSenhaIcon = document.getElementById('toggleSenhaIcon');
+    const senhaInput      = document.getElementById('senha');
+
+    if (toggleSenhaBtn && senhaInput && toggleSenhaIcon) {
+        toggleSenhaBtn.addEventListener('click', () => {
+            const visivel = senhaInput.type === 'text';
+            senhaInput.type = visivel ? 'password' : 'text';
+            toggleSenhaIcon.classList.toggle('fa-eye',       visivel);
+            toggleSenhaIcon.classList.toggle('fa-eye-slash', !visivel);
+            toggleSenhaBtn.setAttribute(
+                'aria-label',
+                visivel ? 'Mostrar senha' : 'Ocultar senha'
+            );
+        });
+    }
+
     // ── Alternância entre painéis ──────────────────────────────────────────
     document.getElementById('linkCriarConta')
         ?.addEventListener('click', () => _mostrarPainel('cadastro'));

@@ -51,9 +51,10 @@ const UsuarioModel = (() => {
         }
     }
 
-    /** Remove a sessão do localStorage (logout). */
+    /** Remove a sessão do localStorage e sessionStorage (logout). */
     function limparSessao() {
         localStorage.removeItem('coper_sessao');
+        sessionStorage.removeItem('coper_sessao');
     }
 
     async function listarTodos() {

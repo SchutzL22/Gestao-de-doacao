@@ -30,6 +30,10 @@ public class Notificacao {
     @JoinColumn(name = "doacao_id", nullable = false)
     private Doacao doacao;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "aluno_id", nullable = false)
+    private Aluno aluno;
+
     public Notificacao() {
     }
 
@@ -38,6 +42,7 @@ public class Notificacao {
         this.dataEnvio = dataEnvio;
         this.canal = canal;
         this.doacao = doacao;
+        this.aluno = doacao != null ? doacao.getAluno() : null;
     }
 
     // ── Getters & Setters ──────────────────────────────────────────────────
@@ -80,5 +85,13 @@ public class Notificacao {
 
     public void setDoacao(Doacao doacao) {
         this.doacao = doacao;
+    }
+
+    public Aluno getAluno() {
+        return aluno;
+    }
+
+    public void setAluno(Aluno aluno) {
+        this.aluno = aluno;
     }
 }

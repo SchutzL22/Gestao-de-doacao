@@ -107,10 +107,17 @@ const TopbarView = (() => {
         }
     }
 
+    function bindLogout(callback) {
+        const btn = document.getElementById('btnTopbarLogout');
+        if (btn) {
+            btn.addEventListener('click', callback);
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         initSearch();
         initNotifications();
     });
 
-    return { exibirUsuario, initSearch, filtrarTelaAtual, configurarNotificacoes };
+    return { exibirUsuario, initSearch, filtrarTelaAtual, configurarNotificacoes, bindLogout };
 })();

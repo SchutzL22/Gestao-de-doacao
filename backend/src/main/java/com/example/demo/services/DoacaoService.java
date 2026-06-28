@@ -24,6 +24,9 @@ public class DoacaoService {
     @Autowired
     private DoacaoRepository doacaoRepository;
 
+    @jakarta.persistence.PersistenceContext
+    private jakarta.persistence.EntityManager entityManager;
+
     @Autowired
     private AlunoRepository alunoRepository;
 
@@ -192,10 +195,34 @@ public class DoacaoService {
 
     @Transactional
     public void deletar(Long id) {
-        if (!doacaoRepository.existsById(id)) {
-            throw new IllegalArgumentException("Doação não encontrada.");
+        Doacao doacao = doacaoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Doação não encontrada."));
+
+        // Se a doação foi aprovada, precisamos descontar as horas do saldo do aluno
+        if (doacao.getStatus() == StatusDoacao.APROVADA) {
+            Aluno aluno = doacao.getAluno();
+            if (aluno != null && doacao.getHorasConcedidas() != null) {
+                Double saldoAtual = aluno.getSaldoHoras() != null ? aluno.getSaldoHoras() : 0.0;
+                aluno.setSaldoHoras(Math.max(0.0, saldoAtual - doacao.getHorasConcedidas()));
+                alunoRepository.save(aluno);
+            }
+            // Remove o certificado associado para evitar violação de integridade estrangeira
+            Optional<Certificado> certOpt = certificadoRepository.findByDoacaoId(id);
+            certOpt.ifPresent(certificado -> certificadoRepository.delete(certificado));
         }
-        doacaoRepository.deleteById(id);
+
+        // 1. Deletar registros de edição e notificações vinculados (evita constraint violations no banco)
+        if (entityManager != null) {
+            entityManager.createNativeQuery("DELETE FROM registros_edicao WHERE doacao_id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+
+            entityManager.createNativeQuery("DELETE FROM notificacoes WHERE doacao_id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+        }
+
+        doacaoRepository.delete(doacao);
     }
 
     private static final java.nio.file.Path rootDir = java.nio.file.Paths.get("uploads");

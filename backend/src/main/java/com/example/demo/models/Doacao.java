@@ -31,7 +31,7 @@ public class Doacao {
     private Integer quantidade;
     private String tipoItem;
 
-    @Enumerated(EnumType.STRING)
+    @jakarta.persistence.Convert(converter = StatusDoacaoConverter.class)
     private StatusDoacao status;
 
     private String fotoEvidencia;
